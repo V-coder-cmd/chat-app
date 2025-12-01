@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>🎄 Chat Natalino 🎅</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+            background: linear-gradient(#d52222, #8b0000);
+            overflow: hidden;
+            transition: background 0.5s;
+        }
+
+        /* ❄ Neve caindo */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: white;
+            font-size: 18px;
+            opacity: 0.9;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(110vh);
+            }
+        }
+
+        .chat-box {
+            width: 480px;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 20px;
+            border-radius: 18px;
+            border: 3px solid #b80000;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(6px);
+            transition: background 0.3s, border 0.3s;
+        }
+
+        /* ❄ DARK MODE → Noite de Natal 🎅🌙 */
+        body.dark {
+            background: linear-gradient(#00111c, #000814);
+        }
+
+        body.dark .chat-box {
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            border: 3px solid #1ca9e6;
+        }
+
+        #messages {
+            height: 380px;
+            overflow-y: scroll;
+            border-radius: 10px;
+            padding: 15px;
+            background: #fff8f0;
+            border: 2px solid #b80000;
+            transition: background 0.3s, border 0.3s;
+        }
+
+        body.dark #messages {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #1ca9e6;
+        }
+
+        .msg {
+            background: #ffe9e2;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border-left: 6px solid #ff3838;
+            transition: background 0.3s;
+        }
+
+        body.dark .msg {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 6px solid #4bd7ff;
+            color: white;
+        }
+
+        .msg strong {
+            color: #0d7a00;
+        }
+
+        body.dark .msg strong {
+            color: #38ff9c;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #0d7a00;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #0a6500;
+        }
+
+        textarea {
+            width: 80%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #b80000;
+            background: #fffaf5;
+            resize: none;
+            height: 70px;
+            transition: background 0.3s, border 0.3s;
+        }
+
+        body.dark textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #4bd7ff;
+            color: white;
+        }
+
+        /* Botão Dark Mode */
+        .toggle-dark {
+            cursor: pointer;
+            background: #0d7a00;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .toggle-dark:hover {
+            background: #0a6500;
+        }
+
+        /* Logout */
+        .logout {
+            font-size: 14px;
+            color: #e74c3c;
+            text-decoration: none;
+        }
+
+        .input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .row-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #preview img {
+            max-width: 200px;
+            border-radius: 12px;
+            margin-top: 8px;
+        }
+
+        .clear-btn {
+        background: #b80000;
+        color: white;
+        border: 2px solid white;
+        padding: 8px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        transition: 0.3s;
+        }
+
+        .clear-btn:hover {
+            background: #ff4d4d;
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ❄ NEVE GERADA COM JS -->
+    <script>
+        function createSnow() {
+            for (let i = 0; i < 25; i++) {
+                let snow = document.createElement("div");
+                snow.className = "snowflake";
+                snow.textContent = "❄";
+
+                snow.style.left = Math.random() * 100 + "vw";
+                snow.style.animationDuration = (5 + Math.random() * 5) + "s";
+
+                document.body.appendChild(snow);
+
+                setTimeout(() => snow.remove(), 12000);
+            }
+        }
+        setInterval(createSnow, 800);
+        createSnow();
+    </script>
+
+    <div class="chat-box">
+        <h2>🎄 Chat Natalino 🎅
+            <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                <span class="toggle-dark" onclick="toggleDark()">🌙</span>
+                <a class="logout" href="/logout">Sair</a>
+                <button id="clearChatBtn" class="clear-btn">🧹 Limpar Chat</button>
+            </div>
+        </h2>
+
+        <div id="messages"></div>
+
+        <div id="typing" style="height: 20px;margin-top: 8px;color: #0d7a00;font-size: 14px;font-style: italic;"></div>
+
+        <div class="input-area">
+            <form id="form" enctype="multipart/form-data">
+
+                <div class="row-input">
+                    <textarea id="message" name="message" placeholder="Digite sua mensagem natalina..."></textarea>
+
+                    <button type="button" onclick="document.getElementById('file').click()">📎</button>
+                </div>
+
+                <div class="row-input">
+                    <button>Enviar 🎁</button>
+                </div>
+
+                <input type="file" id="file" name="file" accept="image/*" style="display:none;">
+            </form>
+
+            <div id="preview"></div>
+        </div>
+
+
+    </div>
+
+    <script>
+        function toggleDark() {
+            document.body.classList.toggle("dark");
+        }
+
+        // Carregar mensagens
+        function loadMessages() {
+            fetch("/messages")
+                .then(r => r.json())
+                .then(data => {
+                    let html = "";
+                    data.forEach(m => {
+                        html += `
+                <div class="msg">
+                    <strong>🎄 ${m.username}</strong><br>
+                    ${m.message}
+                </div>`;
+                    });
+
+                    let box = document.getElementById("messages");
+                    box.innerHTML = html;
+                    box.scrollTop = box.scrollHeight;
+                });
+        }
+
+        setInterval(loadMessages, 1000);
+
+        // Ver digitando
+        function checkTyping() {
+            fetch("/get_typing")
+                .then(r => r.json())
+                .then(data => {
+                    const typingDiv = document.getElementById("typing");
+
+                    if (data.typing && data.typing !== "{{ session['username'] }}") {
+                        typingDiv.textContent = data.typing + " está digitando... 🎅";
+                    } else {
+                        typingDiv.textContent = "";
+                    }
+                });
+        }
+
+        setInterval(checkTyping, 500);
+
+        function loadMessages() {
+            fetch("/messages")
+                .then(r => r.json())
+                .then(data => {
+                    let html = "";
+                    data.forEach(m => {
+                        html += `
+                        <div class="msg">
+                            <strong>🎄 ${m.username}</strong><br>
+                            ${m.message ? m.message : ""}
+                            ${m.image ? `
+                                <br><img src="/static/uploads/${m.image}"
+                                style="max-width:180px;border-radius:12px;margin-top:8px;">
+                            ` : ""}
+                        </div>
+                    `;
+                    });
+
+                    let box = document.getElementById("messages");
+                    box.innerHTML = html;
+                    box.scrollTop = box.scrollHeight;
+                });
+        }
+
+        document.getElementById("form").onsubmit = function (e) {
+            e.preventDefault();
+
+            let fd = new FormData();
+            fd.append("message", document.getElementById("message").value);
+
+            let file = document.getElementById("file").files[0];
+            if (file) fd.append("file", file);
+
+            fetch("/send", { method: "POST", body: fd })
+                .then(() => {
+                    document.getElementById("message").value = "";
+                    document.getElementById("file").value = "";
+                    document.getElementById("preview").innerHTML = "";
+                });
+        };
+
+
+        // Digitando
+        let typingTimeout;
+        const msgInput = document.getElementById("message");
+
+        msgInput.addEventListener("input", () => {
+
+            const fd = new FormData();
+            fd.append("status", "typing");
+
+            fetch("/typing", { method: "POST", body: fd });
+
+            clearTimeout(typingTimeout);
+
+            typingTimeout = setTimeout(() => {
+                const fd2 = new FormData();
+                fd2.append("status", "stop");
+
+                fetch("/typing", { method: "POST", body: fd2 });
+            }, 1500);
+        });
+
+        function previewImage() {
+            const file = document.getElementById("file").files[0];
+            const preview = document.getElementById("preview");
+
+            if (file) {
+                let img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                img.style.maxWidth = "120px";
+                img.style.borderRadius = "10px";
+                img.style.marginTop = "8px";
+                preview.innerHTML = "";
+                preview.appendChild(img);
+            }
+        }
+        document.getElementById("clearChatBtn").addEventListener("click", () => {
+            if (!confirm("Tem certeza que deseja limpar todo o chat? 🧹")) return;
+
+            fetch("/clear_chat", {
+                method: "POST"
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === "ok") {
+                    loadMessages()
+                }
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

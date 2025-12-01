@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+
+<style>
+    body {
+        font-family: Arial;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(#d52222, #8b0000);
+        overflow: hidden;
+    }
+
+    /* ❄ Neve */
+    .snowflake {
+        position: fixed;
+        top: -10px;
+        color: white;
+        font-size: 20px;
+        opacity: 0.9;
+        animation: fall linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(-10px); }
+        100% { transform: translateY(110vh); }
+    }
+
+    /* Caixa */
+    .login-box {
+        width: 360px;
+        background: rgba(255, 255, 255, 0.92);
+        padding: 30px;
+        border-radius: 20px;
+        border: 3px solid #b80000;
+        box-shadow: 0px 4px 25px rgba(0,0,0,0.35);
+        text-align: center;
+        backdrop-filter: blur(6px);
+        animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to   { opacity: 1; transform: scale(1); }
+    }
+
+    h2 {
+        color: #b80000;
+        margin-bottom: 25px;
+        font-size: 26px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 2px solid #b80000;
+        background: #fff8f0;
+        margin-bottom: 14px;
+        font-size: 16px;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #ff3b3b;
+        background: #fff2e6;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 17px;
+        background: #0d7a00;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #0a6500;
+        transform: scale(1.03);
+    }
+
+    a {
+        margin-top: 12px;
+        display: inline-block;
+        color: #004aad;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+    <h2>🎄 Login Natalino 🎅</h2>
+
+    <form action="/login" method="POST">
+        <input type="text" name="username" placeholder="Usuário" required>
+        <input type="password" name="password" placeholder="Senha" required>
+        <button type="submit">Entrar 🎁</button>
+    </form>
+
+    <a href="/cadastro">Ainda não tem conta? Cadastre-se 🎄</a>
+</div>
+
+<script>
+    function createSnow() {
+        for (let i = 0; i < 20; i++) {
+            let snow = document.createElement("div");
+            snow.className = "snowflake";
+            snow.textContent = "❄";
+
+            snow.style.left = Math.random() * 100 + "vw";
+            snow.style.animationDuration = (4 + Math.random() * 6) + "s";
+
+            document.body.appendChild(snow);
+
+            setTimeout(() => snow.remove(), 12000);
+        }
+    }
+
+    setInterval(createSnow, 700);
+    createSnow();
+</script>
+
+</body>
+</html>
